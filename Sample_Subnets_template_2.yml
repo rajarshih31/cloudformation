@@ -7,9 +7,9 @@ Properties:
   AvailabilityZone: ap-southeast-2a
   CidrBlock: 10.1.1.0/28
   MapPublicIpOnLaunch: true
-   Tags:
-      - Key: Name
-        Value: Subnet1-sample-cfn-template
+  Tags:
+    - Key: Name
+      Value: Subnet1-sample-cfn-template
   VpcId: vpc-0e83fde36cc21d352
   
 Type: AWS::EC2::Subnet
@@ -17,7 +17,7 @@ Properties:
   AvailabilityZone: ap-southeast-2b
   CidrBlock: 10.1.2.0/28
   MapPublicIpOnLaunch: true
-   Tags:
-      - Key: Name
-        Value: Subnet2-sample-cfn-template
+  Tags:
+    - Key: Name
+      Value: Subnet2-sample-cfn-template
   VpcId: vpc-0e83fde36cc21d352
