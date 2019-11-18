@@ -10,4 +10,4 @@ Resources:
       EnableDnsHostnames: true
       Tags:
       - Key: Name
-        Value:  Test-vpc-with-cloudformation
+        Value:  Test-vpc1-with-cfn-template
