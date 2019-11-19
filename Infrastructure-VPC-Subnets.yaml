@@ -1,0 +1,369 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description:
+    Template to deploy the Core VPC, Subnets, Internet Gateway, VPC Peering Connection and S3 Endpoints.
+
+Parameters:
+   DXCMgmntAccountID:
+    Type: String
+    MaxLength: '12'
+
+   CustomerName:
+    Type: String
+    MinLength: '3'
+    MaxLength: '5'
+   CustomerCIDR:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+
+   ThreeAvailabilityZonesActivatedParam:
+    Type: String
+    Default: 'yes'
+    AllowedValues:
+      - 'yes'
+      - 'no'
+   AZ1:
+    Type: String
+   AZ2:
+    Type: String
+   AZ3:
+    Type: String
+
+   DMZ1A:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+   DMZ1B:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+   DMZ1C:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+
+   APP1A:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+   APP1B:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+   APP1C:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+
+   DB1A:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+   DB1B:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+   DB1C:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+
+   DSKTOP1A:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+   DSKTOP1B:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+   DSKTOP1C:
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+
+
+Conditions:
+
+   ThreeAvailabilityZonesActivated: !Equals
+     - !Ref ThreeAvailabilityZonesActivatedParam
+     - 'yes'
+
+Resources:
+
+   #Customer VPC
+   VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock:
+        Ref: CustomerCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref CustomerName, "VPC" ]]
+
+   #DMZ Subnet 1 - Availability Zone 1
+   DMZ1ASubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Ref: AZ1
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: DMZ1A
+      Tags:
+      - Key: Name
+        Value: DMZ-1A
+
+   #DMZ Subnet 2 - Availability Zone 2
+   DMZ1BSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Ref: AZ2
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: DMZ1B
+      Tags:
+      - Key: Name
+        Value: DMZ-1B
+
+   #DMZ Subnet 3 - Availability Zone 3
+   DMZ1CSubnet:
+    Type: AWS::EC2::Subnet
+    Condition: ThreeAvailabilityZonesActivated
+    Properties:
+      AvailabilityZone:
+        Ref: AZ3
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: DMZ1C
+      Tags:
+      - Key: Name
+        Value: DMZ-1C
+
+   #Application Subnet 1 - Availability Zone 1
+   APP1ASubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Ref: AZ1
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: APP1A
+      Tags:
+      - Key: Name
+        Value: APP-1A
+
+   #Application Subnet 2 - Availability Zone 2
+   APP1BSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Ref: AZ2
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: APP1B
+      Tags:
+      - Key: Name
+        Value: APP-1B
+
+   #Application Subnet 3 - Availability Zone 3
+   APP1CSubnet:
+    Type: AWS::EC2::Subnet
+    Condition: ThreeAvailabilityZonesActivated
+    Properties:
+      AvailabilityZone:
+        Ref: AZ3
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: APP1C
+      Tags:
+      - Key: Name
+        Value: APP-1C
+
+   #Database Subnet 1 - Availability Zone 1
+   DB1ASubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Ref: AZ1
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: DB1A
+      Tags:
+      - Key: Name
+        Value: DB-1A
+
+   #Database Subnet 2 - Availability Zone 2
+   DB1BSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Ref: AZ2
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: DB1B
+      Tags:
+      - Key: Name
+        Value: DB-1B
+
+   #Database Subnet 3 - Availability Zone 3
+   DB1CSubnet:
+    Type: AWS::EC2::Subnet
+    Condition: ThreeAvailabilityZonesActivated
+    Properties:
+      AvailabilityZone:
+        Ref: AZ3
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: DB1C
+      Tags:
+      - Key: Name
+        Value: DB-1C
+
+   #Desktop Subnet 1 - Availability Zone 1
+   DSKTOP1ASubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Ref: AZ1
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: DSKTOP1A
+      Tags:
+      - Key: Name
+        Value: DSKTOP-1A
+
+   #Desktop Subnet 2 - Availability Zone 2
+   DSKTOP1BSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Ref: AZ2
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: DSKTOP1B
+      Tags:
+      - Key: Name
+        Value: DSKTOP-1B
+
+   #Desktop Subnet 3 - Availability Zone 3
+   DSKTOP1CSubnet:
+    Type: AWS::EC2::Subnet
+    Condition: ThreeAvailabilityZonesActivated
+    Properties:
+      AvailabilityZone:
+        Ref: AZ3
+      VpcId:
+        Ref: VPC
+      CidrBlock:
+        Ref: DSKTOP1C
+      Tags:
+      - Key: Name
+        Value: DSKTOP-1C
+
+   #VPC Internet Gateway
+   InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value: !Join [ "-", [ !Ref CustomerName, "IGW" ]]
+
+   #Attachment of IGW to customer VPC
+   GatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId:
+        Ref: InternetGateway
+
+Outputs:
+  CustomerVPCId:
+    Description: ID of VPC
+    Value: !Ref VPC
+    Export:
+      Name: 'vpc-id'
+  DMZ1AId:
+    Description: ID of DMZ-1A Subnet
+    Value: !Ref DMZ1ASubnet
+    Export:
+        Name: 'dmz1a-id'
+  DMZ1BId:
+    Description: ID of DMZ-1B Subnet
+    Value: !Ref DMZ1BSubnet
+    Export:
+        Name: 'dmz1b-id'
+  DMZ1CId:
+    Description: ID of DMZ-1C Subnet
+    Value: !Ref DMZ1CSubnet
+    Export:
+        Name: 'dmz1c-id'
+    Condition: ThreeAvailabilityZonesActivated
+  APP1AId:
+    Description: ID of APP-1A Subnet
+    Value: !Ref APP1ASubnet
+    Export:
+        Name: 'app1a-id'
+  APP1BId:
+    Description: ID of APP-1B Subnet
+    Value: !Ref APP1BSubnet
+    Export:
+        Name: 'app1b-id'
+  APP1CId:
+    Description: ID of APP-1C Subnet
+    Value: !Ref APP1CSubnet
+    Export:
+        Name: 'app1c-id'
+    Condition: ThreeAvailabilityZonesActivated
+  DB1AId:
+    Description: ID of DB-1A Subnet
+    Value: !Ref DB1ASubnet
+    Export:
+        Name: 'db1a-id'
+  DB1BId:
+    Description: ID of DB-1B Subnet
+    Value: !Ref DB1BSubnet
+    Export:
+        Name: 'db1b-id'
+  DB1CId:
+    Description: ID of DB-1C Subnet
+    Value: !Ref DB1CSubnet
+    Export:
+        Name: 'db1c-id'
+    Condition: ThreeAvailabilityZonesActivated
+  DSKTOP1AId:
+    Description: ID of DSKTOP-1A Subnet
+    Value: !Ref DSKTOP1ASubnet
+    Export:
+        Name: 'dsktop1a-id'
+  DSKTOP1BId:
+    Description: ID of DSKTOP-1B Subnet
+    Value: !Ref DSKTOP1BSubnet
+    Export:
+        Name: 'dsktop1b-id'
+  DSKTOP1CId:
+    Description: ID of DSKTOP-1C Subnet
+    Value: !Ref DSKTOP1CSubnet
+    Export:
+        Name: 'dsktop1c-id'
+    Condition: ThreeAvailabilityZonesActivated
+  InternetGatewayId:
+    Description: ID of IGW
+    Value: !Ref InternetGateway
+    Export:
+      Name: 'igw-id'
