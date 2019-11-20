@@ -1,0 +1,54 @@
+version: 0.2
+
+#env:
+  #variables:
+     # key: "value"
+     # key: "value"
+  #parameter-store:
+     # key: "value"
+     # key: "value"
+  #secrets-manager:
+     # key: secret-id:json-key:version-stage:version-id
+     # key: secret-id:json-key:version-stage:version-id
+  #exported-variables:
+     # - variable
+     # - variable
+  #git-credential-helper: yes
+
+ 
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+    #commands:
+      # - command
+      # - command
+  # pre_build:
+  #   commands:
+  #     - echo "installing git"
+  #     - sudo yum install git -y
+  build:
+    commands:
+      # - echo "Downloading from git"
+      # - mkdir tmp-repo
+      # - cd tmp-repo
+      # - git clone https://github.com/Gooygeek/infra-cicd-test.git
+      - echo "All files..."
+      - ls -lA
+      - echo "Uploading to S3"
+      - aws s3 sync . s3://nestedcfn-basestack-s3bucket-1jfo1yre7glfu/cicd-test
+  #post_build:
+    #commands:
+      # - command
+      # - command
+#artifacts:
+  #files:
+    # - location
+    # - location
+  #name: $(date +%Y-%m-%d)
+  #discard-paths: yes
+  #base-directory: location
+#cache:
+  #paths:
+    # - paths
