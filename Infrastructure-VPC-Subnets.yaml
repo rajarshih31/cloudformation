@@ -16,7 +16,7 @@ Resources:
       InstanceTenancy: default
       Tags:
       - Key: Name
-        Value: Test-vpc-fromcfn-stack
+        Value: Test-vpc-from-cfn-stack
 
    #DMZ Subnet 1 - Availability Zone 1
    DMZ1ASubnet:
