@@ -37,7 +37,7 @@ phases:
       - echo "All files..."
       - ls -lA
       - echo "Uploading to S3"
-      - aws s3 sync . s3://nestedcfn-basestack-s3bucket-1jfo1yre7glfu/cicd-test
+      - aws s3 sync . s3://dxcdev-repo/cicd--nested-cfn-test
   #post_build:
     #commands:
       # - command

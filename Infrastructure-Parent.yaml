@@ -10,7 +10,7 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     DeletionPolicy: Retain
     Properties:
-      TemplateURL: https://nestedcfn-basestack-s3bucket-1jfo1yre7glfu.s3-ap-southeast-2.amazonaws.com/cicd-test/Infrastructure-VPC-Subnets.yaml
+      TemplateURL: https:///dxcdev-repo.s3-ap-southeast-2.amazonaws.com/cicd--nested-cfn-test/Infrastructure-VPC-Subnets.yaml
       TimeoutInMinutes: '60'
       Tags:
         - Key: Name
